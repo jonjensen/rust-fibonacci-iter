@@ -3,6 +3,8 @@
 use std::env;
 use std::process;
 
+extern crate benchmarking;
+
 struct Fibonacci(u32, u128, u128);
 
 impl Fibonacci {
@@ -44,6 +46,8 @@ impl Next for Fibonacci {
 }
 */
 
+const BENCHMARK_ITERATIONS: u64 = 1_000_000;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
@@ -51,10 +55,28 @@ fn main() {
         process::exit(1);
     }
     let num = args[1].parse().unwrap();
-    let seq = Fibonacci::new();
-    let mut i: u32 = 0;
-    for n in seq.take(num) {
-        i += 1;
-        println!("{}: {}", i, n);
-    }
+
+    benchmarking::warm_up();
+
+    let bench_result =
+        benchmarking::measure_function_with_times(BENCHMARK_ITERATIONS, move |measurer| {
+            measurer.measure(|| {
+                let seq = Fibonacci::new();
+                // Skip printing for the benchmark, to just measure non-I/O time
+                seq.take(num).last();
+                /*
+                let mut i: u32 = 0;
+                for i in seq.take(num) {
+                    i += 1;
+                    println!("{}: {}", i, n);
+                }
+                */
+            });
+        })
+        .unwrap();
+
+    println!(
+        "Grabbing those Fibonacci numbers takes {:?}",
+        bench_result.elapsed()
+    );
 }

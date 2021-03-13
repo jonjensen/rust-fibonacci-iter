@@ -5,7 +5,9 @@ authors = ["Jon Jensen <jon@endpoint.com>"]
 edition = "2018"
 
 [dependencies]
+benchmarking = "0.4.9"
 
 [profile.release]
-overflow-checks = true
+#overflow-checks = true
+overflow-checks = false
 panic = 'abort'
