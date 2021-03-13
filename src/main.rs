@@ -1,9 +1,8 @@
 // adapted from https://www.softax.pl/blog/rust-lang-in-a-nutshell-3-traits-and-generics/
 
+use benchmarking;
 use std::env;
 use std::process;
-
-extern crate benchmarking;
 
 struct Fibonacci(u32, u128, u128);
 
