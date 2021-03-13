@@ -1,6 +1,7 @@
 // adapted from https://www.softax.pl/blog/rust-lang-in-a-nutshell-3-traits-and-generics/
 
 use std::env;
+use std::process;
 
 struct Fibonacci(u32, u128, u128);
 
@@ -46,7 +47,8 @@ impl Next for Fibonacci {
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() != 2 {
-        panic!("Please supply one argument, the Fibonacci sequence number to go to");
+        eprintln!("Please supply one argument, the Fibonacci sequence number to go to");
+        process::exit(1);
     }
     let num = args[1].parse().unwrap();
     let seq = Fibonacci::new();
